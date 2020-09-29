@@ -1,0 +1,98 @@
+:root {
+    /* background colors */
+    --ui-white: #fff;
+    --ui-dark-0: #000;
+    --ui-dark-panel: #28241e;
+    --ui-dark-bg: #403a34;
+    --ui-cream: #ffede2;
+    --ui-light-text: #eee;
+    --ui-seawater: #539888;
+    --ui-seawater-dark: #3a7064;
+    /* text colors */
+    --ui-light-text: #eee;
+}
+
+body {
+    font-family: "Courier New", Courier, monospace;
+}
+
+div#content-container {
+    background-color: var(--ui-dark-bg);
+    float:left;
+    padding:1em;
+}
+
+div#frames-container {
+    padding: 0.5em;
+    width: 40%;
+    height: 50em;
+    overflow-y: scroll;
+    float: left;
+    background-color: var(--ui-dark-panel);
+}
+
+div#video-container {
+    width: 50%;
+    float: left;
+    margin-left: 1em;
+    padding: 0.5em;
+    background-color: var(--ui-dark-panel);
+}
+
+div#video-container video {
+    width: 100%;
+}
+
+div#make-preview-button {
+    background-color: var(--ui-white);
+    color: var(--ui-dark-panel);
+    border: 1px solid var(--ui-cream);
+    text-align: center;
+    padding: 0.25em;
+
+    float: left;
+    width: 10em;
+    margin-right: 1em;
+}
+
+div#make-preview-button::after {
+    content: " \1F760";
+}
+
+div#make-preview-button:hover {
+    background-color: var(--ui-seawater);
+    border: 1px solid #fff;
+    color: var(--ui-dark-0);
+}
+
+div#frames-dropdown-container {
+    background-color: var(--ui-white);
+    padding: 0.25em;
+    text-align: center;
+    border: 1px solid white;
+    float: left;
+}
+
+div.frame-thumb-container {
+    background-color: var(--ui-cream);
+    margin-bottom: 0.5em;
+}
+
+img.frame-thumb {
+    width: 100%;
+ 
+}
+
+.frame-number {
+    color: var(--ui-cream);
+    background-color: var(--ui-dark-0);
+    font-size: 1em;
+    font-weight: bold;
+    padding-left: .25em;
+    padding-top: .25em;
+}
+
+.frame-number p {
+    margin: 0
+}
+
