@@ -1,0 +1,1 @@
+ffmpeg -start_number 1 -y -i static/frames/frame%04d.jpg -vframes 15 -r 20 static/video/preview_726276.webm

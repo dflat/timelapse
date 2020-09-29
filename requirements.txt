@@ -1,0 +1,4 @@
+numpy==1.17.0
+Pillow==6.2.0
+gphoto2==2.2.2
+Flask==0.12.1

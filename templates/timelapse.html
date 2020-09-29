@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Timelapse</title>
+    <link rel="stylesheet" href={{ url_for('static', filename='styles/basic.css') }}>
+    <script src={{ url_for('static', filename='js/dir_watch.js') }}></script>
+</head>
+<body>
+    <div id="content-container">
+
+        <div id="frames-container">
+
+            {% for frame in frames %}
+                <div class="frame-thumb-container">
+                    <img class="frame-thumb" src={{frame.url}} alt={{frame.number}}>
+                    <div class="frame-number"><p>{{frame.number}}</p></div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <div id="video-container">
+            <video id="preview-player" autoplay loop controls> 
+                <source src={{video_preview}} type="video/webm">
+            </video>
+            <div id="buttons-container">
+
+                <div id="make-preview-button">make preview</div>
+
+                <div id="frames-dropdown-container">
+                    <label for="frame-count">frames:</label>
+                    <select name="frame-select" id="frame-count">
+                        <option value=15>15</option>
+                        <option value=30>30</option>
+                        <option value=60>60</option>
+                        <option value=90>90</option>
+                        <option value=120>120</option>
+                    </select>
+                </div> <!-- frames-dropdown-container -->
+            </div> <!--buttons-container -->
+        </div> <!--video-container -->
+
+    </div> <!--content-container -->
+</body>
+</html>
