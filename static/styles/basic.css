@@ -52,7 +52,11 @@ div#make-preview-button {
 
     float: left;
     width: 10em;
-    margin-right: 1em;
+//    margin-right: 1em;
+}
+
+div#make-preview-button a {
+    text-decoration: none;
 }
 
 div#make-preview-button::after {
@@ -65,12 +69,13 @@ div#make-preview-button:hover {
     color: var(--ui-dark-0);
 }
 
-div#frames-dropdown-container {
+.dropdown-container {
     background-color: var(--ui-white);
     padding: 0.25em;
     text-align: center;
     border: 1px solid white;
     float: left;
+    margin-left: 0.5em;
 }
 
 div.frame-thumb-container {

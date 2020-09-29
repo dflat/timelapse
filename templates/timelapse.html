@@ -20,14 +20,14 @@
         </div>
 
         <div id="video-container">
-            <video id="preview-player" autoplay loop controls> 
+            <video id="preview-player" muted autoplay loop controls> 
                 <source src={{video_preview}} type="video/webm">
             </video>
             <div id="buttons-container">
 
-                <div id="make-preview-button">make preview</div>
+                <a href="#"><div id="make-preview-button">make preview</div></a>
 
-                <div id="frames-dropdown-container">
+                <div id="frames-dropdown-container" class="dropdown-container">
                     <label for="frame-count">frames:</label>
                     <select name="frame-select" id="frame-count">
                         <option value=15>15</option>
@@ -37,6 +37,18 @@
                         <option value=120>120</option>
                     </select>
                 </div> <!-- frames-dropdown-container -->
+
+                <div id="fps-dropdown-container" class="dropdown-container">
+                    <label for="fps">fps:</label>
+                    <select name="fps-select" id="fps">
+                        <option value=5>5</option>
+                        <option value=10>10</option>
+                        <option value=15>15</option>
+                        <option value=30>30</option>
+                        <option value=60>60</option>
+                    </select>
+                </div> <!-- fps-dropdown-container -->
+
             </div> <!--buttons-container -->
         </div> <!--video-container -->
 

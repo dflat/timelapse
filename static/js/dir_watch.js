@@ -29,19 +29,28 @@ docReady(function() {
 function make_video_preview(e) {
     var k = e.code;
     if (k == "KeyP") {
-        console.log("generating video preview...");
-        generate_video_preview(e);
+        console.log("generating gif preview...");
+        generate_gif_preview(e);
     }
+}
+
+function generate_gif_preview(e) {
+    var frame_count = document.getElementById("frame-count").value;
+    console.log(frame_count);
+    change_video_source(VIDEO_PLAYER_ID, LOADING_ANIM_SRC); // show loading animation    
+    xhr(callback=update_video_preview, endpoint="/api/make_gif_preview/" + frame_count);
 }
 
 function generate_video_preview(e) {
     var frame_count = document.getElementById("frame-count").value;
+    var fps = document.getElementById("fps").value;
     console.log(frame_count);
     change_video_source(VIDEO_PLAYER_ID, LOADING_ANIM_SRC); // show loading animation    
-    xhr(callback=update_video_preview, endpoint="/api/make_video_preview/" + frame_count);
+    var query_string = "?fps=" + fps;
+    xhr(callback=update_video_preview, endpoint="/api/make_video_preview/" + frame_count + query_string);
 }
 
-function poll_for_new_frames(interval=5000) {
+function poll_for_new_frames(interval) {
     window.setInterval(xhr, interval, fetch_new_frames, "/api/listdir/frames");
 }
 
@@ -69,7 +78,7 @@ function make_thumb_node(src, frame_no) {
 function fetch_new_frames(xhr_response) {
     var frames = document.getElementById("frames-container");
     var new_frames = JSON.parse(xhr_response.responseText);
-    new_frames.forEach(f => frames.prepend(make_thumb_node(f.url, f.number)));
+    new_frames.forEach(function(f) { frames.prepend(make_thumb_node(f.url, f.number));});
 }
 
 function update_video_preview(xhr_response) {
