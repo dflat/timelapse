@@ -3,6 +3,7 @@
     --ui-white: #fff;
     --ui-dark-0: #000;
     --ui-dark-panel: #28241e;
+    --ui-panel-medium: #5d544b;
     --ui-dark-bg: #403a34;
     --ui-cream: #ffede2;
     --ui-light-text: #eee;
@@ -10,10 +11,21 @@
     --ui-seawater-dark: #3a7064;
     /* text colors */
     --ui-light-text: #eee;
+    /* geometry */
+    --ui-slight-radius: 0.1em;
+    --ui-slight-shadow: 0px 1px 1px 1px #222;
 }
 
 body {
     font-family: "Courier New", Courier, monospace;
+}
+
+div {
+    border-radius: var(--ui-slight-radius);
+}
+
+a {
+    text-decoration: none;
 }
 
 div#content-container {
@@ -33,7 +45,9 @@ div#frames-container {
 
 div#video-container {
     width: 50%;
-    float: left;
+    min-width: 25em;
+    overflow-x:scroll;
+    float: right;
     margin-left: 1em;
     padding: 0.5em;
     background-color: var(--ui-dark-panel);
@@ -41,6 +55,7 @@ div#video-container {
 
 div#video-container video {
     width: 100%;
+    height: 25em;
 }
 
 div#make-preview-button {
@@ -55,10 +70,6 @@ div#make-preview-button {
 //    margin-right: 1em;
 }
 
-div#make-preview-button a {
-    text-decoration: none;
-}
-
 div#make-preview-button::after {
     content: " \1F760";
 }
@@ -67,6 +78,35 @@ div#make-preview-button:hover {
     background-color: var(--ui-seawater);
     border: 1px solid #fff;
     color: var(--ui-dark-0);
+}
+
+div#buttons-container {
+    background-color: var(--ui-dark-0);
+    display: block;
+    overflow: auto;
+    padding: 0.5em;
+    border-radius: var(--ui-slight-radius);
+    text-align: center;
+    box-shadow: var(--ui-slight-shadow);
+}
+
+div#buttons-container div {
+    border-radius: var(--ui-slight-radius);
+    display: inline-block;
+    float: none;
+    box-shadow: var(--ui-slight-shadow);
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    
+}
+
+div#timelapse-control-container {
+    background-color: var(--ui-dark-panel);
+    width: 50%;
+    min-width: 25em;
+    float:right;
+    padding: 0.5em;
+    margin-top: 1em;
 }
 
 .dropdown-container {
@@ -89,6 +129,7 @@ img.frame-thumb {
 }
 
 .frame-number {
+    border-radius: 0em;
     color: var(--ui-cream);
     background-color: var(--ui-dark-0);
     font-size: 1em;

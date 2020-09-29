@@ -50,3 +50,12 @@ ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 stat
 ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_190999.webm
 ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_355931.webm
 ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_983049.webm
+ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_543091.webm
+ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_1029542.webm
+ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_495721.webm
+ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_201823.webm
+ffmpeg -r 5 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_463880.webm
+ffmpeg -r 30 -start_number 106 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_232886.webm
+ffmpeg -r 30 -start_number 1 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_416885.webm
+ffmpeg -r 5 -start_number 1 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_762368.webm
+ffmpeg -r 5 -start_number 1 -y -i static/frames/frame%04d.jpg -vframes 15 static/video/preview_487281.webm

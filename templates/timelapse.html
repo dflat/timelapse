@@ -25,11 +25,11 @@
             </video>
             <div id="buttons-container">
 
-                <a href="#"><div id="make-preview-button">make preview</div></a>
+                <a href="#" title="Make a timelapse preview."><div id="make-preview-button">make preview</div></a>
 
                 <div id="frames-dropdown-container" class="dropdown-container">
                     <label for="frame-count">frames:</label>
-                    <select name="frame-select" id="frame-count">
+                    <select title="Use the last n frames." name="frame-select" id="frame-count">
                         <option value=15>15</option>
                         <option value=30>30</option>
                         <option value=60>60</option>
@@ -40,7 +40,7 @@
 
                 <div id="fps-dropdown-container" class="dropdown-container">
                     <label for="fps">fps:</label>
-                    <select name="fps-select" id="fps">
+                    <select title="Video frames per second." name="fps-select" id="fps">
                         <option value=5>5</option>
                         <option value=10>10</option>
                         <option value=15>15</option>
@@ -52,6 +52,12 @@
             </div> <!--buttons-container -->
         </div> <!--video-container -->
 
+        <div id="timelapse-control-container" class="panel-right">
+            <div class="panel-title">Timelapse Session</div>
+            <div id="timelapse-controls" class="panel-controls">
+                <a href="#" title="Start a new timelapse."><div id="start-timelapse-button">Start</div></a>
+            </div> <!--timelapse-controls -->
+        </div> <!--timelapse-control-container -->
     </div> <!--content-container -->
 </body>
 </html>
