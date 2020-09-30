@@ -160,10 +160,10 @@ class Timelapse:
                             print("Uncaught Error:", e.string)
                             utils.log(logfile=TL_LOG, msg="{}, count: {}, error:{} -- {}".format(
                                                         datetime.datetime.now(), count, e.code, e.string))
-                            #self.cam_remote.wait_for_event()
+                            self.cam_remote.wait_for_event()
                             # testing this..... !TODO fix and handle gphoto2 errors here better
-                            self.cam_remote.free()
-                            raise e
+                            #self.cam_remote.free()
+                            #raise e
 
                 print("captured frame # ", count)  # Advance count and elapsed time
                 next_shot += interval
@@ -296,3 +296,33 @@ def get_display_dur(seconds):
             formatted_duration.append("%d %s" % (n, unit))
     return ", ".join(formatted_duration) or "0 seconds"
 
+class CaptureSetting:
+    F_NUMBERS = [5.6, 6.3, 7.1, 8, 9, 10, 11, 13, 14, 16, 18, 20, 22, 25, 29, 32]
+    SHUTTER_SPEEDS = ['30', '25', '20', '15', '13', '10', '8', '6', '5', '4', '3', '2', '1',
+			'1/2', '1/3', '1/4', '1/5', '1/6', '1/8', '1/10', '1/13', '1/15', '1/20',
+			'1/25', '1/30', '1/40', '1/50', '1/60', '1/80', '1/100', '1/125', '1/160',
+			'1/200', '1/250', '1/320', '1/400', '1/500', '1/640', '1/800', '1/1000',
+			'1/1250', '1/1600', '1/2000', '1/2500', '1/3200', '1/4000']
+    F_NUMBER_MAP = dict(zip(F_NUMBERS, range(len(F_NUMBERS))))
+    SHUTTER_SPEED_MAP = dict(zip(SHUTTER_SPEEDS, range(len(SHUTTER_SPEEDS))))
+
+    def __init__(self, f_number=10, shutter_speed=1/10)
+        try:
+            self.f_number_index = self.F_NUMBER_MAP[f_number]
+        except IndexError:
+            raise "Invalid f-number: %r" % f_number
+        try:
+            self.shutter_speed_index = self.SHUTTER_SPEED_MAP[shutter_speed]
+        except IndexError:
+            raise "Invalid shutter speed: %r" % shutter_speed
+        self.f_number = "f/" + str(f_number)
+        self.shutter = str(shutter_speed)
+
+    def f_number_up(self):
+        self.f_number = "f/" + self.F_NUMBERS[min(self.f_number_index + 1, len(self.F_NUMBERS) - 1)]
+    def f_number_down(self):
+        self.f_number = "f/" + self.F_NUMBERS[max(0, self.f_number_index - 1)]
+    def shutter_speed_up(self):
+        self.shutter_speed = self.SHUTTER_SPEEDS[min(self.shutter_speed_index + 1, len(self.SHUTTER_SPEEDS) - 1)]
+    def shutter_speed_down(self):
+        self.shutter_speed = self.SHUTTER_SPEEDS[max(0, self.shutter_speed_index - 1)]
