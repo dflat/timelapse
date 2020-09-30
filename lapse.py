@@ -306,7 +306,7 @@ class CaptureSetting:
     F_NUMBER_MAP = dict(zip(F_NUMBERS, range(len(F_NUMBERS))))
     SHUTTER_SPEED_MAP = dict(zip(SHUTTER_SPEEDS, range(len(SHUTTER_SPEEDS))))
 
-    def __init__(self, f_number=10, shutter_speed=1/10)
+    def __init__(self, f_number=10, shutter_speed=1/10):
         try:
             self.f_number_index = self.F_NUMBER_MAP[f_number]
         except IndexError:
