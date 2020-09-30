@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import datetime
 import subprocess
 from contextlib import contextmanager
 import gphoto2 as gp
@@ -152,13 +153,13 @@ class Timelapse:
                         if e.code == gp.GP_ERROR_CAMERA_BUSY:
                             print("Camera was busy, waiting for event...")
                             utils.log(logfile=TL_LOG, msg="{}, count: {}, error:{} -- {}".format(
-                                                        time.now(), count, e.code, e.string))
+                                                        datetime.datetime.now(), count, e.code, e.string))
                             self.cam_remote.wait_for_event()
                         else:
                             self.error = e
                             print("Uncaught Error:", e.string)
                             utils.log(logfile=TL_LOG, msg="{}, count: {}, error:{} -- {}".format(
-                                                        time.now(), count, e.code, e.string))
+                                                        datetime.datetime.now(), count, e.code, e.string))
                             #self.cam_remote.wait_for_event()
                             # testing this..... !TODO fix and handle gphoto2 errors here better
                             self.cam_remote.free()
