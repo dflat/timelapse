@@ -306,7 +306,7 @@ class CaptureSetting:
     F_NUMBER_MAP = dict(zip(F_NUMBERS, range(len(F_NUMBERS))))
     SHUTTER_SPEED_MAP = dict(zip(SHUTTER_SPEEDS, range(len(SHUTTER_SPEEDS))))
 
-    def __init__(self, f_number=10, shutter_speed=1/10):
+    def __init__(self, f_number=10, shutter_speed='1/10'):
         try:
             self.f_number_index = self.F_NUMBER_MAP[f_number]
         except IndexError:
@@ -316,7 +316,7 @@ class CaptureSetting:
         except IndexError:
             raise "Invalid shutter speed: %r" % shutter_speed
         self.f_number = "f/" + str(f_number)
-        self.shutter = str(shutter_speed)
+        self.shutter_speed = str(shutter_speed)
 
     def f_number_up(self):
         self.f_number = "f/" + self.F_NUMBERS[min(self.f_number_index + 1, len(self.F_NUMBERS) - 1)]
@@ -326,3 +326,21 @@ class CaptureSetting:
         self.shutter_speed = self.SHUTTER_SPEEDS[min(self.shutter_speed_index + 1, len(self.SHUTTER_SPEEDS) - 1)]
     def shutter_speed_down(self):
         self.shutter_speed = self.SHUTTER_SPEEDS[max(0, self.shutter_speed_index - 1)]
+
+    def exposure_matrix(self, cr: CameraRemote, single_f = None):
+        if single_f and single_f in self.F_NUMBER_MAP:
+            f_nums = [single_f]
+        else:
+            f_nums = self.F_NUMBERS
+        count = 0
+        def fname(fnum, speed):
+            nonlocal count
+            count += 1
+            return "%03d_F%.1f_S%s.jpg" % (count, fnum, speed.replace("/", '-'))
+        for fnum in reversed(f_nums):
+            #cr.set_capture_setting("fnumber", "f/%.1f" % fnum)
+            for speed in reversed(self.SHUTTER_SPEEDS):
+                #cr.set_capture_setting("shutterspeed2", speed)
+                #cr.capture(fname(fnum, speed))
+                print("F: %s, S: %s, file: %s" % (fnum, speed, fname(fnum, speed)))
+                
