@@ -1,0 +1,5 @@
+# exclude everything to have git track the bare directory,
+#     but none of its contents.
+
+*             # ignore all files and sub-dirs
+!.gitignore   # preserve directory's .gitignore file

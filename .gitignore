@@ -1,4 +1,4 @@
 __pycache__/
-static/video/
-static/frames/
-static/ui/
+static/video/*
+static/frames/*
+static/ui/*
