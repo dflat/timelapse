@@ -26,7 +26,7 @@ class Frame(dict):
         self.url = url
 
 @app.route('/')
-def timelapse_page():
+def timelapse_page(max_displayed_frames=100):
     frame_filenames = os.listdir(os.path.join('static', Frame.DIR))
     count = 1
     frames = []
@@ -37,7 +37,7 @@ def timelapse_page():
     random_clip_number = random.randint(1, len(os.listdir('static/ui/welcome_clips')))
     session['welcome_video'] = os.path.join("static", UI_DIR, "welcome_clips", "vapor_%03d.webm" % random_clip_number)
 #    session['video_preview'] = session.get('latest_video_preview', os.path.join('static', VIDEO_DIR, Frame.VID_NAME))
-    return render_template("timelapse.html", frames=reversed(frames),
+    return render_template("timelapse.html", frames=list(reversed(frames))[:max_displayed_frames],
                                             video_preview=session['welcome_video'])
 
 @app.route('/api/listdir/<dirname>')
