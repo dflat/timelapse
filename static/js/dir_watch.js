@@ -37,8 +37,8 @@ function make_video_preview(e) {
 function generate_gif_preview(e) {
     var frame_count = document.getElementById("frame-count").value;
     console.log(frame_count);
-    change_video_source(VIDEO_PLAYER_ID, LOADING_ANIM_SRC); // show loading animation    
-    xhr(callback=update_video_preview, endpoint="/api/make_gif_preview/" + frame_count);
+    //change_video_source(VIDEO_PLAYER_ID, LOADING_ANIM_SRC); // show loading animation    
+    xhr(callback=update_gif_preview, endpoint="/api/make_gif_preview/" + frame_count);
 }
 
 function generate_video_preview(e) {
@@ -83,6 +83,17 @@ function fetch_new_frames(xhr_response) {
 
 function update_video_preview(xhr_response) {
     change_video_source(VIDEO_PLAYER_ID, xhr_response.responseText);
+}
+
+function update_gif_preview(xhr_response) {
+    var video_container = document.querySelector("#video-container");
+    var gif_container = document.createElement("div");
+    gif_container.classList.add("gif-container");
+    var img = document.createElement("img");
+    img.src = xhr_response.responseText;
+    img.classList.add(IMG_THUMB_CLS);
+    gif_container.append(img);
+    video_container.append(gif_container);
 }
 
 function change_video_source(player_id, new_source) {
