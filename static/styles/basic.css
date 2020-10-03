@@ -9,11 +9,17 @@
     --ui-light-text: #eee;
     --ui-seawater: #539888;
     --ui-seawater-dark: #3a7064;
+    --ui-button-bg: #4c4c4c;
+    --ui-button-grey-hover: #414141;
+    --ui-panel-grey: #5c5c5c;
     /* text colors */
     --ui-light-text: #eee;
+    --ui-button-text-light: #d6d6d6;
     /* geometry */
     --ui-slight-radius: 0.1em;
+    --ui-control-panel-radius:  0.2em;
     --ui-slight-shadow: 0px 1px 1px 1px #222;
+    --ui-button-outline: 0px 0px 0px 1px #22222233;
 }
 
 body {
@@ -59,11 +65,13 @@ div#video-container video {
 }
 
 div#make-preview-button {
-    background-color: var(--ui-white);
+    //background-color: var(--ui-white);
+    background-color: #6d6d6d42;
     color: var(--ui-dark-panel);
-    border: 1px solid var(--ui-cream);
+    //border: 1px solid var(--ui-cream);
     text-align: center;
     padding: 0.25em;
+    font-size:0.95em;
 
     float: left;
     width: 10em;
@@ -75,29 +83,33 @@ div#make-preview-button::after {
 }
 
 div#make-preview-button:hover {
-    background-color: var(--ui-seawater);
-    border: 1px solid #fff;
-    color: var(--ui-dark-0);
+//    background-color: var(--ui-seawater);
+    background-color: #0d0d0d99;
+    //border: 1px solid #fff;
+    color: var(--ui-button-text-light);
 }
 
 div#buttons-container {
-    background-color: var(--ui-dark-0);
+    //background-color: #6d6d6d42;
+    background-color:#0d0d0d6b;
     display: block;
     overflow: auto;
     padding: 0.5em;
-    border-radius: var(--ui-slight-radius);
+    border-radius: var(--ui-control-panel-radius);
     text-align: center;
     box-shadow: var(--ui-slight-shadow);
 }
 
 div#buttons-container div {
+    color: var(--ui-button-text-light);
     border-radius: var(--ui-slight-radius);
+    background-color:#0d0d0d6b;
     display: inline-block;
     float: none;
-    box-shadow: var(--ui-slight-shadow);
+    box-shadow: var(--ui-button-outline); 
     padding-top: 0.2em;
     padding-bottom: 0.2em;
-    
+        
 }
 
 div#timelapse-control-container {
@@ -110,12 +122,14 @@ div#timelapse-control-container {
 }
 
 .dropdown-container {
-    background-color: var(--ui-white);
+    background-color: #0d0d0d6b;
     padding: 0.25em;
     text-align: center;
-    border: 1px solid white;
+    //border: 1px solid white;
     float: left;
     margin-left: 0.5em;
+    color: var(--ui-button-text-light);
+    font-size: 0.95em;
 }
 
 div.frame-thumb-container {
