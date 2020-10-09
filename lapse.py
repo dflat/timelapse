@@ -30,6 +30,10 @@ def osx_permission_fix():
     if os.uname().sysname == "Darwin":
         subprocess.run(["killall", "PTPCamera"])
 
+def linux_permission_fix():
+    if os.uname()[0] == "Linux":
+        subprocess.run(["pkill", "-f", "gphoto2"])
+
 class CameraRemote:
     '''
     Simplified API (using gphoto2) to control a DSLR (e.g. Nikon D60) over USB.
@@ -37,16 +41,19 @@ class CameraRemote:
     F_NUMBERS = [4.8, 5, 5.6, 6.3, 7.1, 8, 9, 10, 11, 13, 14, 16, 18, 20, 22, 25, 29, 32]
     SHUTTER_SPEEDS = []
 
-    def __init__(self, verbose=True):
+    def __init__(self, verbose=False):
         self.cam = self._init_session(verbose)
         self.cfg = self.cam.get_config()
 
     def _init_session(self, verbose=True):
         osx_permission_fix()
+        linux_permission_fix()
         camera = gp.Camera()
         camera.init()
         if verbose:
             print(camera.get_summary())
+        else:
+            print("Camera initialized.")
         return camera
 
     @contextmanager
@@ -319,13 +326,17 @@ class CaptureSetting:
         self.shutter_speed = str(shutter_speed)
 
     def f_number_up(self):
-        self.f_number = "f/" + self.F_NUMBERS[min(self.f_number_index + 1, len(self.F_NUMBERS) - 1)]
+        self.f_number_index = min(self.f_number_index + 1, len(self.F_NUMBERS) - 1)
+        self.f_number = "f/" + self.F_NUMBERS[self.f_number_index]
     def f_number_down(self):
-        self.f_number = "f/" + self.F_NUMBERS[max(0, self.f_number_index - 1)]
+        self.f_number_index = max(0, self.f_number_index - 1)
+        self.f_number = "f/" + self.F_NUMBERS[self.f_number_index]
     def shutter_speed_up(self):
-        self.shutter_speed = self.SHUTTER_SPEEDS[min(self.shutter_speed_index + 1, len(self.SHUTTER_SPEEDS) - 1)]
+        self.shutter_speed_index = min(self.shutter_speed_index + 1, len(self.SHUTTER_SPEEDS) - 1)
+        self.shutter_speed = self.SHUTTER_SPEEDS[self.shutter_speed_index]
     def shutter_speed_down(self):
-        self.shutter_speed = self.SHUTTER_SPEEDS[max(0, self.shutter_speed_index - 1)]
+        self.shutter_speed_index = max(0, self.shutter_speed_index - 1)
+        self.shutter_speed = self.SHUTTER_SPEEDS[self.shutter_speed_index]
 
     def exposure_matrix(self, cr: CameraRemote, single_f = None):
         if single_f and single_f in self.F_NUMBER_MAP:
