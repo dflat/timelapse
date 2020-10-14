@@ -382,7 +382,6 @@ class CaptureSetting:
             cr.fstop = "f/%.1f" % fnum
             for speed in reversed(self.SHUTTER_SPEEDS[:start_speed_index+1]):
                 cr.shutterspeed = speed
-<<<<<<< HEAD
                 outfile = fname(fnum, speed)
                 error_count = 0
                 while True:
