@@ -379,5 +379,5 @@ class CaptureSetting:
             for speed in reversed(self.SHUTTER_SPEEDS):
                 cr.shutterspeed = speed
                 cr.capture(fname(fnum, speed))
-                print("F: %s, S: %s, file: %s" % (fnum, speed, fname(fnum, speed)))
+                print("Captured (F: %s, S: %s), saved to: %s" % (fnum, speed, fname(fnum, speed)))
                 
