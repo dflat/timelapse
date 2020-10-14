@@ -13,6 +13,7 @@ FRAMES_DIR = "static/frames"
 DIFFS_DIR = "static/diffs"
 OVERLAYS_DIR = "static/overlays"
 TL_LOG = "logs/timelapse.log"
+STDOUT = sys.stdout
 
 # Example usage:
 #
@@ -44,6 +45,7 @@ class CameraRemote:
     def __init__(self, verbose=False):
         self.cam = self._init_session(verbose)
         self.cfg = self.cam.get_config()
+        self.capture_settings = CaptureSetting(self.fstop, self.shutterspeed)
 
     def _init_session(self, verbose=True):
         osx_permission_fix()
@@ -75,6 +77,24 @@ class CameraRemote:
     @fstop.setter
     def fstop(self, val):
         self.set_capture_setting("f-number", val)
+
+    @property
+    def shutterspeed(self):
+        return self.get_capture_setting("shutterspeed2")
+
+    @shutterspeed.setter
+    def shutterspeed(self, val):
+        self.set_capture_setting("shutterspeed2", val)
+
+    @property
+    def exposure(self):
+        ...
+        #return self.get_capture_setting("exposure")
+    
+    def slower(self):
+        self.capture_settings.shutter_speed_down()
+    def faster(self):
+        self.capture_settings.shutter_speed_up()
 
     def print_capture_settings(self):
         ''' 
@@ -112,9 +132,9 @@ class CameraRemote:
                 #print("event: timeout")
                 return
             if type_ == gp.GP_EVENT_FILE_ADDED:
-                print("event: file added event.")
+                print("event: file added event.", file=STDOUT)
             if type_ == gp.GP_EVENT_CAPTURE_COMPLETE:
-                print("event: capture completed.")
+                print("event: capture completed.", file=STDOUT)
 
     def free(self):
         ''' Free camera resource. '''
@@ -123,15 +143,17 @@ class CameraRemote:
 class Timelapse:
     FRAME_TMPL = "frame%04d.jpg"
 
-    def __init__(self, cam_remote: CameraRemote, frames_dir=FRAMES_DIR):
+    def __init__(self, cam_remote: CameraRemote, frames_dir=FRAMES_DIR, logfile=None):
         self.cam_remote = cam_remote
         self.frames_dir = frames_dir
+        self.logfile = logfile
         self._setup()
 
     def _setup(self):
         if not os.path.exists(self.frames_dir):
             os.makedirs(self.frames_dir)
         self.frame_template = os.path.join(self.frames_dir, self.FRAME_TMPL)
+        self.log = sys.stdout if self.logfile is None else open(self.logfile, "a")
 
     def start(self, interval=10, duration=None):
         count = 1
@@ -158,21 +180,21 @@ class Timelapse:
                         break
                     except gp.GPhoto2Error as e:
                         if e.code == gp.GP_ERROR_CAMERA_BUSY:
-                            print("Camera was busy, waiting for event...")
                             utils.log(logfile=TL_LOG, msg="{}, count: {}, error:{} -- {}".format(
                                                         datetime.datetime.now(), count, e.code, e.string))
+                            print("Camera was busy, waiting for event...", file=STDOUT)
                             self.cam_remote.wait_for_event()
                         else:
                             self.error = e
-                            print("Uncaught Error:", e.string)
                             utils.log(logfile=TL_LOG, msg="{}, count: {}, error:{} -- {}".format(
                                                         datetime.datetime.now(), count, e.code, e.string))
+                            print("Uncaught Error:", e.string, file=STDOUT)
                             self.cam_remote.wait_for_event()
                             # testing this..... !TODO fix and handle gphoto2 errors here better
                             #self.cam_remote.free()
                             #raise e
 
-                print("captured frame # ", count)  # Advance count and elapsed time
+                print("captured frame # ", count, file=STDOUT)  # Advance count and elapsed time
                 next_shot += interval
                 count += 1
                 elapsed_time = time.time() - started
@@ -181,10 +203,12 @@ class Timelapse:
                     break
 
             except KeyboardInterrupt:
-                print("Timelapse ended.")
+                print("Timelapse ended.", file=STDOUT)
                 break
-        print("Timelapse finished.")
+        print("Timelapse finished.", file=STDOUT)
         self.cam_remote.free()  # free camera USB resource
+        if self.log != sys.stdout:
+            self.log.close()
 
 # Example usage, run a timelapse.
 def run(interval=10, duration=5*60): # e.g., capture photo every 10 seconds for 5 minutes
@@ -266,7 +290,7 @@ def trace_motion(frames_dir):
         im.save(TMP % count)
         prev = cur
         count += 1
-    print("Processed %d frames." % count)            
+    print("Processed %d frames." % count, file=STDOUT)            
     return
 
 def overlay_motion_trace(frames_dir, diffs_dir):
@@ -314,6 +338,8 @@ class CaptureSetting:
     SHUTTER_SPEED_MAP = dict(zip(SHUTTER_SPEEDS, range(len(SHUTTER_SPEEDS))))
 
     def __init__(self, f_number=10, shutter_speed='1/10', min_shutter_speed=10):
+        if isinstance(f_number, str) and f_number.startswith("f/"):
+            f_number = float(f_number.lstrip("f/"))
         try:
             self.f_number_index = self.F_NUMBER_MAP[f_number]
         except IndexError:

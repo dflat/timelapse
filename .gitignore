@@ -7,3 +7,5 @@ static/gifs/*
 static/sessions/*
 static/misc/*
 *.swp
+logs/*
+nohup.out
