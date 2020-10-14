@@ -13,6 +13,7 @@ GIF_DIR = "gifs"
 FFMPEG_LOG = "logs/ffmpeg.log"
 FFMPEG_BIT_RATE = "1M"
 UI_DIR = "ui"
+PREVIEW_FMT = "webm"
 
 class Frame(dict):
     DIR = "frames"
@@ -38,7 +39,7 @@ def timelapse_page(max_displayed_frames=100):
     session['welcome_video'] = os.path.join("static", UI_DIR, "welcome_clips", "vapor_%03d.webm" % random_clip_number)
 #    session['video_preview'] = session.get('latest_video_preview', os.path.join('static', VIDEO_DIR, Frame.VID_NAME))
     return render_template("timelapse.html", frames=list(reversed(frames))[:max_displayed_frames],
-                                            video_preview=session['welcome_video'])
+                                            video_preview=session['welcome_video'], preview_fmt=PREVIEW_FMT)
 
 @app.route('/api/listdir/<dirname>')
 def api_listdir(dirname):
@@ -62,7 +63,7 @@ def make_video_preview(n_frames):
     frames = os.listdir(os.path.join('static', 'frames'))
     start_number = max(1, len(frames) - n_frames)
     in_path = os.path.join('static', Frame.DIR, Frame.TMPL)
-    out_path = os.path.join('static', VIDEO_DIR, "preview_" + str(random.randint(0, 2**20)) + ".webm")
+    out_path = os.path.join('static', VIDEO_DIR, "preview_" + str(random.randint(0, 2**20)) + "." + PREVIEW_FMT)
     cmd = ['ffmpeg', '-r', str(fps), '-start_number', str(start_number), force_overwrite, '-i', in_path,
             '-vframes', str(n_frames), out_path]
 #            '-r', str(fps), "-b:v", str(FFMPEG_BIT_RATE), '-bufsize', '1B', "-maxrate", "1B",  out_path]
