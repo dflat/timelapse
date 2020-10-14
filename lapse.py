@@ -111,7 +111,7 @@ class CameraRemote:
     def set_capture_setting(self, name, val):    # Write to camera.
         with self.camera_config() as camera:
             field = camera.get_child_by_name(name)
-            print(field, "****debug")
+            #print(field, "****debug")
             field.set_value(val)
         print(f"{name} set to {val}")
 
@@ -337,7 +337,7 @@ class CaptureSetting:
     F_NUMBER_MAP = dict(zip(F_NUMBERS, range(len(F_NUMBERS))))
     SHUTTER_SPEED_MAP = dict(zip(SHUTTER_SPEEDS, range(len(SHUTTER_SPEEDS))))
 
-    def __init__(self, f_number=10, shutter_speed='1/10', min_shutter_speed=10):
+    def __init__(self, f_number=10, shutter_speed='1/10'):
         if isinstance(f_number, str) and f_number.startswith("f/"):
             f_number = float(f_number.lstrip("f/"))
         try:
@@ -364,20 +364,42 @@ class CaptureSetting:
         self.shutter_speed_index = max(0, self.shutter_speed_index - 1)
         self.shutter_speed = self.SHUTTER_SPEEDS[self.shutter_speed_index]
 
-    def exposure_matrix(self, cr: CameraRemote, single_f = None):
+    def exposure_matrix(self, cr: CameraRemote, single_f = None, start_speed = '1/2500', outdir="static/misc/exposure_matrices"):
+        start_speed_index = self.SHUTTER_SPEED_MAP.get(start_speed, '1/2500')
         if single_f and single_f in self.F_NUMBER_MAP: # Allow for a fixed f-number, varying only shutter speed.
             f_nums = [single_f]
+            print("Running through speeds @ f/%.1f" % f_nums[0])
         else:
             f_nums = self.F_NUMBERS
+            print("Running through all f-numbers")
         count = 0
         def fname(fnum, speed):
             nonlocal count
             count += 1
-            return "%03d_F%.1f_S%s.jpg" % (count, fnum, speed.replace("/", '-'))
+            return os.path.join(outdir,
+                        "%03d_F%.1f_S%s.jpg" % (count, fnum, speed.replace("/", '-')))
         for fnum in reversed(f_nums):
             cr.fstop = "f/%.1f" % fnum
-            for speed in reversed(self.SHUTTER_SPEEDS):
+            for speed in reversed(self.SHUTTER_SPEEDS[:start_speed_index+1]):
                 cr.shutterspeed = speed
-                cr.capture(fname(fnum, speed))
-                print("F: %s, S: %s, file: %s" % (fnum, speed, fname(fnum, speed)))
-                
+                outfile = fname(fnum, speed)
+                error_count = 0
+                while True:
+                    try:
+                        cr.capture(outfile)
+                        break
+                    except gp.GPhoto2Error as e:
+                        if error_count > 5:
+                            raise e
+                        print("recovering from error:", e)
+                        error_count += 1
+                        time.sleep(1)
+                print("F: %s, S: %s, file: %s" % (fnum, speed, outfile))
+                delay = speed_to_float(speed)
+                time.sleep(delay)
+
+def speed_to_float(speed_str):
+    vals = speed_str.split("/")
+    if len(vals) > 1:
+        return float(vals[0]) / float(vals[1])
+    return float(vals[0])
