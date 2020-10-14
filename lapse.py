@@ -382,6 +382,7 @@ class CaptureSetting:
             cr.fstop = "f/%.1f" % fnum
             for speed in reversed(self.SHUTTER_SPEEDS[:start_speed_index+1]):
                 cr.shutterspeed = speed
+<<<<<<< HEAD
                 outfile = fname(fnum, speed)
                 error_count = 0
                 while True:
@@ -394,7 +395,7 @@ class CaptureSetting:
                         print("recovering from error:", e)
                         error_count += 1
                         time.sleep(1)
-                print("F: %s, S: %s, file: %s" % (fnum, speed, outfile))
+                print("Captured (F: %s, S: %s), saved to: %s" % (fnum, speed, outfile))
                 delay = speed_to_float(speed)
                 time.sleep(delay)
 
