@@ -333,11 +333,11 @@ class CaptureSetting:
 			'1/2', '1/3', '1/4', '1/5', '1/6', '1/8', '1/10', '1/13', '1/15', '1/20',
 			'1/25', '1/30', '1/40', '1/50', '1/60', '1/80', '1/100', '1/125', '1/160',
 			'1/200', '1/250', '1/320', '1/400', '1/500', '1/640', '1/800', '1/1000',
-			'1/1250', '1/1600', '1/2000', '1/2500', '1/3200', '1/4000']
+			'1/1250', '1/1600', '1/2000', '1/2500'] #, '1/3200', '1/4000']
     F_NUMBER_MAP = dict(zip(F_NUMBERS, range(len(F_NUMBERS))))
     SHUTTER_SPEED_MAP = dict(zip(SHUTTER_SPEEDS, range(len(SHUTTER_SPEEDS))))
 
-    def __init__(self, f_number=10, shutter_speed='1/10'):
+    def __init__(self, f_number=10, shutter_speed='1/10', min_shutter_speed=10):
         if isinstance(f_number, str) and f_number.startswith("f/"):
             f_number = float(f_number.lstrip("f/"))
         try:
@@ -365,7 +365,7 @@ class CaptureSetting:
         self.shutter_speed = self.SHUTTER_SPEEDS[self.shutter_speed_index]
 
     def exposure_matrix(self, cr: CameraRemote, single_f = None):
-        if single_f and single_f in self.F_NUMBER_MAP:
+        if single_f and single_f in self.F_NUMBER_MAP: # Allow for a fixed f-number, varying only shutter speed.
             f_nums = [single_f]
         else:
             f_nums = self.F_NUMBERS
@@ -375,9 +375,9 @@ class CaptureSetting:
             count += 1
             return "%03d_F%.1f_S%s.jpg" % (count, fnum, speed.replace("/", '-'))
         for fnum in reversed(f_nums):
-            #cr.set_capture_setting("fnumber", "f/%.1f" % fnum)
+            cr.fstop = "f/%.1f" % fnum
             for speed in reversed(self.SHUTTER_SPEEDS):
-                #cr.set_capture_setting("shutterspeed2", speed)
-                #cr.capture(fname(fnum, speed))
+                cr.shutterspeed = speed
+                cr.capture(fname(fnum, speed))
                 print("F: %s, S: %s, file: %s" % (fnum, speed, fname(fnum, speed)))
                 
