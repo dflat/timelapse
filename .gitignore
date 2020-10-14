@@ -3,3 +3,5 @@ static/video/*
 static/frames/*
 static/ui/*
 *.swp
+logs/*
+nohup.out
